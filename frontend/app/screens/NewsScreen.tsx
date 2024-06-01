@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, Text, Image, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import NewsDisplay from "../components/NewsDisplay";
 
-function NewsScreen() {
+const NewsScreen: React.FC = () => {
 
-  const [author, setAuthor] = useState();
-  const [image, setImage] = useState();
-  const [text, setText] = useState();
-  const [title, setTitle] = useState();
-  const [link, setLink] = useState();
-  const [date, setDate] = useState();
+  const [author, setAuthor] = useState<string | undefined>();
+  const [image, setImage] = useState<string | undefined>();
+  const [text, setText] = useState<string | undefined>();
+  const [title, setTitle] = useState<string | undefined>();
+  const [link, setLink] = useState<string | undefined>();
+  const [date, setDate] = useState<string | undefined>();
 
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://96d2-104-198-208-140.ngrok-free.app",
+        "https://7692-34-87-189-0.ngrok-free.app",
         {
           headers: {
             "ngrok-skip-browser-warning": "1231",
@@ -44,10 +44,18 @@ function NewsScreen() {
   }, []);
 
   return (
-    <View className="flex flex-col justify-center items-center border h-screen">
-      <NewsDisplay author={author} image={image} text={text} title={title} link={link} date={date}/>
+    <View className="h-screen w-screen">
+      <NewsDisplay 
+        author={author || ""}
+        image={image || ""}
+        text={text || ""}
+        title={title || ""}
+        link={link || ""}
+        date={date || ""}
+      />
     </View>
   );
-}
+};
 
 export default NewsScreen;
+
