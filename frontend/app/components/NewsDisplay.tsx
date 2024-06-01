@@ -1,16 +1,15 @@
 import React from "react";
-import { SafeAreaView, View, Text, Image, Linking } from "react-native";
+import { View, Text, Image, Linking } from "react-native";
+import News from "../models/News";
 
 interface NewsDisplayProps {
-  author: string;
-  image: string;
-  text: string;
-  title: string;
-  link: string;
-  date: string;
+  news?: News;
 }
 
-const NewsDisplay: React.FC<NewsDisplayProps> = ({ author, image, text, title, link, date }) => {
+const NewsDisplay: React.FC<NewsDisplayProps> = ({ news }) => {
+  if (!news) {
+    return <View><Text>No news available</Text></View>;
+  }
 
   const timeSince = (date: Date) => {
     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
@@ -39,7 +38,7 @@ const NewsDisplay: React.FC<NewsDisplayProps> = ({ author, image, text, title, l
   };
 
   const handleURLPress = () => {
-    Linking.openURL(link);
+    Linking.openURL(news.link);
   };
 
   const colors = [
@@ -54,21 +53,21 @@ const NewsDisplay: React.FC<NewsDisplayProps> = ({ author, image, text, title, l
   return (
     <View className={`w-screen h-full ${randomizeBgColor()}`}>
       <View className="w-full h-1/2 flex flex-col justify-end">
-        <Image source={{ uri: image }} className="absolute top-0 left-0 w-full h-full"/>
+        <Image source={{ uri: news.image }} className="absolute top-0 left-0 w-full h-full"/>
         <View className="bg-[#000000B3] py-4 px-5 flex flex-row justify-between">
           <View>
-            <Text className="text-white text-lg">{author}</Text>
+            <Text className="text-white text-lg">{news.author}</Text>
           </View>
           <View>
-            <Text className="text-white text-lg">{timeSince(new Date(date))}</Text>
+            <Text className="text-white text-lg">{timeSince(new Date(news.date))}</Text>
           </View>
         </View>
       </View>
       <View className="p-4 flex flex-col">
-        <Text className="text-3xl font-bold">{title}</Text>
-        <Text className="text-sm mt-5">{text}</Text>
+        <Text className="text-3xl font-bold">{news.title}</Text>
+        <Text className="text-sm mt-5">{news.text}</Text>
         <View className="justify-end">
-          <Text className="text-sm mt-5" onPress={handleURLPress}>Source: {link}</Text>
+          <Text className="text-sm mt-5" onPress={handleURLPress}>Source: {news.link}</Text>
         </View>
       </View>
     </View>

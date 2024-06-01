@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import NewsDisplay from "../components/NewsDisplay";
+import News from "../models/News";
 
 const NewsScreen: React.FC = () => {
 
-  const [author, setAuthor] = useState<string | undefined>();
-  const [image, setImage] = useState<string | undefined>();
-  const [text, setText] = useState<string | undefined>();
-  const [title, setTitle] = useState<string | undefined>();
-  const [link, setLink] = useState<string | undefined>();
-  const [date, setDate] = useState<string | undefined>();
+  const [news, setNews] = useState<News>();
 
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://7692-34-87-189-0.ngrok-free.app",
+        "https://35ad-34-87-189-0.ngrok-free.app",
         {
           headers: {
             "ngrok-skip-browser-warning": "1231",
@@ -28,12 +24,18 @@ const NewsScreen: React.FC = () => {
       }
 
       const data = await response.json();
-      setAuthor(data.Author);
-      setImage(data.Image);
-      setText(data.Text);
-      setTitle(data.Title);
-      setLink(data.URL);
-      setDate(data.Date);
+
+      const newsData: News = {
+        author: data.Author,
+        image: data.Image,
+        text: data.Text,
+        title: data.Title,
+        link: data.Link,
+        date: data.Date
+      };
+
+      setNews(newsData);
+
     } catch (error) {
       console.error("Error fetching :", error);
     }
@@ -45,14 +47,7 @@ const NewsScreen: React.FC = () => {
 
   return (
     <View className="h-screen w-screen">
-      <NewsDisplay 
-        author={author || ""}
-        image={image || ""}
-        text={text || ""}
-        title={title || ""}
-        link={link || ""}
-        date={date || ""}
-      />
+      <NewsDisplay news={news}/>
     </View>
   );
 };
