@@ -11,63 +11,31 @@ const NewsDisplay: React.FC<NewsDisplayProps> = ({ news }) => {
     return <View><Text>No news available</Text></View>;
   }
 
-  const timeSince = (date: Date) => {
-    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-    let interval = Math.floor(seconds / 31536000);
-
-    if (interval > 1) {
-      return `${interval} years ago`;
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-      return `${interval} months ago`;
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-      return `${interval} days ago`;
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-      return `${interval} hours ago`;
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) {
-      return `${interval} minutes ago`;
-    }
-    return `${Math.floor(seconds)} seconds ago`;
-  };
-
   const handleURLPress = () => {
     Linking.openURL(news.link);
   };
 
-  const colors = [
-    'red', 'orange', 'yellow', 'green', 'teal', 'blue', 'indigo', 'purple', 'pink', 'rose', 'cyan', 'emerald', 'violet'
-  ];
-
-  const randomizeBgColor = () => {
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    return `bg-${randomColor}-100`;
-  };
+  const calendar = require('../assets/calendar.webp');
+  const profile = require('../assets/pfp.png');
 
   return (
-    <View className={`w-screen h-full ${randomizeBgColor()}`}>
-      <View className="w-full h-1/2 flex flex-col justify-end">
-        <Image source={{ uri: news.image }} className="absolute top-0 left-0 w-full h-full"/>
-        <View className="bg-[#000000B3] py-4 px-5 flex flex-row justify-between">
-          <View>
-            <Text className="text-white text-lg">{news.author}</Text>
-          </View>
-          <View>
-            <Text className="text-white text-lg">{timeSince(new Date(news.date))}</Text>
-          </View>
-        </View>
-      </View>
+    <View className="w-screen h-full bg-black">
+      <Image source={{ uri: news.image }} className="w-max h-[undefined] aspect-square"/>
       <View className="p-4 flex flex-col">
-        <Text className="text-3xl font-bold">{news.title}</Text>
-        <Text className="text-sm mt-5">{news.text}</Text>
+        <Text className="text-3xl font-bold text-white">{news.title}</Text>
+        <View className="flex flex-row justify-between w-full my-8">
+          <View className="flex flex-row items-center">
+            <Image source={profile} className="h-10 w-10 mr-3"/>
+            <Text className="text-sm font-bold text-white">Author:{"\n"}{news.author}</Text>
+          </View>
+          <View className="flex flex-row items-center">
+            <Image source={calendar} className="h-8 w-8 mr-2"/>
+            <Text className="text-sm font-bold text-white">{new Date(news.date).toDateString()}</Text>
+          </View>
+        </View>     
+        <Text className="text-sm  text-white">        {news.text?.replace(/\n/g, ' ')}</Text>
         <View className="justify-end">
-          <Text className="text-sm mt-5" onPress={handleURLPress}>Source: {news.link}</Text>
+          <Text className="text-sm mt-5 text-white font-light underline" onPress={handleURLPress}>Read More</Text>
         </View>
       </View>
     </View>

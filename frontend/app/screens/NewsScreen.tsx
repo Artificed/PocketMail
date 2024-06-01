@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import NewsDisplay from "../components/NewsDisplay";
 import News from "../models/News";
 
@@ -30,7 +30,7 @@ const NewsScreen: React.FC = () => {
         image: data.Image,
         text: data.Text,
         title: data.Title,
-        link: data.Link,
+        link: data.URL,
         date: data.Date
       };
 
