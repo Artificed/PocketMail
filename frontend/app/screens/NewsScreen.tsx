@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from "react-native";
 import NewsDisplay from "../components/NewsDisplay";
 import News from "../models/News";
 
 const NewsScreen: React.FC = () => {
-
   const [news, setNews] = useState<News>();
+  const [swipeTimeout, setSwipeTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [isHolding, setIsHolding] = useState(false);
 
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://35ad-34-87-189-0.ngrok-free.app",
+        "https://a184-34-125-71-143.ngrok-free.app/",
         {
           headers: {
             "ngrok-skip-browser-warning": "1231",
@@ -31,11 +36,10 @@ const NewsScreen: React.FC = () => {
         text: data.Text,
         title: data.Title,
         link: data.URL,
-        date: data.Date
+        date: data.Date,
       };
 
       setNews(newsData);
-
     } catch (error) {
       console.error("Error fetching :", error);
     }
@@ -45,12 +49,61 @@ const NewsScreen: React.FC = () => {
     fetchData();
   }, []);
 
+  const handleHorizontalScrollEnd = (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
+    const contentWidth = event.nativeEvent.contentSize.width;
+    const layoutWidth = event.nativeEvent.layoutMeasurement.width;
+    const horizontalOffset = event.nativeEvent.contentOffset.x;
+
+    if (
+      (horizontalOffset <= 0 ||
+        horizontalOffset >= contentWidth - layoutWidth) &&
+      isHolding
+    ) {
+      fetchData();
+    }
+    setIsHolding(false);
+  };
+
+  const handleScrollBeginDrag = (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
+    const contentWidth = event.nativeEvent.contentSize.width;
+    const layoutWidth = event.nativeEvent.layoutMeasurement.width;
+    const horizontalOffset = event.nativeEvent.contentOffset.x;
+
+    if (
+      horizontalOffset <= 0 ||
+      horizontalOffset >= contentWidth - layoutWidth
+    ) {
+      const timeout = setTimeout(() => {
+        setIsHolding(true);
+      }, 100);
+      setSwipeTimeout(timeout);
+    }
+  };
+
+  const handleScrollEndDrag = () => {
+    if (swipeTimeout) {
+      clearTimeout(swipeTimeout);
+      setSwipeTimeout(null);
+    }
+  };
+
   return (
-    <View className="h-screen w-screen">
-      <NewsDisplay news={news}/>
-    </View>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      horizontal
+      onMomentumScrollEnd={handleHorizontalScrollEnd}
+      onScrollBeginDrag={handleScrollBeginDrag}
+      onScrollEndDrag={handleScrollEndDrag}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <NewsDisplay news={news} />
+      </ScrollView>
+    </ScrollView>
   );
 };
 
 export default NewsScreen;
-
