@@ -15,7 +15,7 @@ const NewsScreen: React.FC = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://099a-34-125-71-143.ngrok-free.app/",
+        "https://a184-34-125-71-143.ngrok-free.app/",
         {
           headers: {
             "ngrok-skip-browser-warning": "1231",

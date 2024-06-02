@@ -4,20 +4,20 @@
     "slug": "PocketMail",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/iconv1.png",
+    "icon": "./assets/iconv2.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splashv1.png",
+      "image": "./assets/splashv2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#8C52FF"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-iconv1.png",
-        "backgroundColor": "#8C52FF"
+        "foregroundImage": "./assets/adaptive-iconv2.png",
+        "backgroundColor": "#000000"
       }
     },
     "web": {
